@@ -1,13 +1,6 @@
-"use client";
-
 import FAQItem from "./FAQItem";
 
-interface FAQCategoryProps {
-  title: string;
-  items: { question: string; answer: string }[];
-}
-
-export default function FAQCategory({ title, items }: FAQCategoryProps) {
+export default function FAQCategory({ title, items }) {
   return (
     <div>
       <h3 className="text-xl font-semibold text-black dark:text-white">{title}</h3>

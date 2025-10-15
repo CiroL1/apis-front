@@ -1,20 +1,13 @@
-"use client";
-
-import { FullProduct } from "./ProductDetailContainer";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-interface ProductInfoProps {
-  product: FullProduct;
-}
-
-export default function ProductInfo({ product }: ProductInfoProps) {
+export default function ProductInfo({ product }) {
   const [selectedStorage, setSelectedStorage] = useState(product.storageOptions?.[0] || "");
   const [selectedColor, setSelectedColor] = useState(product.colors?.[0] || "");
 
   const handleAddToCart = async () => {
     try {
-      const res = await fetch("/api/cart", {
+      const res = await fetch("http://localhost:8080/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId: product.id, quantity: 1 }),
@@ -40,7 +33,11 @@ export default function ProductInfo({ product }: ProductInfoProps) {
             {product.storageOptions.map((s) => (
               <label
                 key={s}
-                className={`cursor-pointer rounded border px-4 py-2 text-sm font-medium ${selectedStorage === s ? "border-primary bg-primary/10 text-primary" : "border-gray-300"}`}
+                className={`cursor-pointer rounded border px-4 py-2 text-sm font-medium ${
+                  selectedStorage === s
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-gray-300"
+                }`}
               >
                 {s}
                 <input
@@ -70,14 +67,20 @@ export default function ProductInfo({ product }: ProductInfoProps) {
                   checked={selectedColor === c}
                   onChange={() => setSelectedColor(c)}
                 />
-                <div className={`size-8 rounded-full border ${c} peer-checked:ring-2 peer-checked:ring-primary`} style={{ backgroundColor: c }}></div>
+                <div
+                  className={`size-8 rounded-full border ${c} peer-checked:ring-2 peer-checked:ring-primary`}
+                  style={{ backgroundColor: c }}
+                ></div>
               </label>
             ))}
           </div>
         </div>
       )}
 
-      <button onClick={handleAddToCart} className="w-full rounded-lg bg-primary py-3 text-white font-bold hover:bg-primary/90">
+      <button
+        onClick={handleAddToCart}
+        className="w-full rounded-lg bg-primary py-3 text-white font-bold hover:bg-primary/90"
+      >
         Add to Cart
       </button>
     </div>

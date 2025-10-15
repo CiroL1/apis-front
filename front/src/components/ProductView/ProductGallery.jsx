@@ -1,18 +1,10 @@
-"use client";
-
-import { FullProduct } from "./ProductDetailContainer";
 import { useState, useEffect, useRef } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface ProductGalleryProps {
-  product: FullProduct;
-  interval?: number; // tiempo en ms para autoplay
-}
-
-export default function ProductGallery({ product, interval = 20000 }: ProductGalleryProps) {
+export default function ProductGallery({ product, interval = 20000 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
 
   const nextImage = () => setCurrentIndex((prev) => (prev + 1) % product.images.length);
   const prevImage = () =>

@@ -1,34 +1,6 @@
-"use client";
+import { useEffect, useState } from "react";
 
-import { useEffect, useState, ReactNode } from "react";
-
-export interface FullProduct {
-  id: string;
-  name: string;
-  price: number;
-  images: string[]; // varias imágenes
-  category?: string;
-  subcategories?: string[];
-  featured?: boolean;
-  description?: string;
-  specifications?: Record<string, string>;
-  colors?: string[];
-  storageOptions?: string[];
-  reviews?: {
-    user: string;
-    rating: number;
-    comment: string;
-    date: string;
-    avatar: string;
-  }[];
-}
-
-interface ProductDetailContainerProps {
-  id: string;
-  children: (product: FullProduct) => ReactNode;
-}
-
-const GENERIC_PRODUCT: FullProduct = {
+const GENERIC_PRODUCT = {
   id: "0",
   name: "Producto Genérico",
   price: 99.99,
@@ -54,8 +26,8 @@ const GENERIC_PRODUCT: FullProduct = {
   ],
 };
 
-export default function ProductDetailContainer({ id, children }: ProductDetailContainerProps) {
-  const [product, setProduct] = useState<FullProduct | null>(null);
+export default function ProductDetailContainer({ id, children }) {
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,10 +35,10 @@ export default function ProductDetailContainer({ id, children }: ProductDetailCo
       try {
         const res = await fetch(`http://localhost:8080/api/products/${id}`);
         if (!res.ok) throw new Error("No se pudo obtener el producto");
-        const data: FullProduct = await res.json();
+        const data = await res.json();
 
         // Normalizamos images
-        const normalized: FullProduct = {
+        const normalized = {
           ...data,
           images: data.images || (data.images ? [data.images] : []),
         };

@@ -1,12 +1,4 @@
-"use client";
-
-import { FullProduct } from "./ProductDetailContainer";
-
-interface ProductSpecsProps {
-  product: FullProduct;
-}
-
-export default function ProductSpecs({ product }: ProductSpecsProps) {
+export default function ProductSpecs({ product }) {
   if (!product.specifications) return null;
 
   return (

@@ -1,5 +1,3 @@
-"use client";
-
 import FAQCategory from "./FAQCategory";
 
 export default function FAQSection() {

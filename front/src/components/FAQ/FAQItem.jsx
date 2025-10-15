@@ -1,13 +1,6 @@
-"use client";
-
 import { HiChevronRight } from "react-icons/hi"; // Heroicons
 
-interface FAQItemProps {
-  question: string;
-  answer: string;
-}
-
-export default function FAQItem({ question, answer }: FAQItemProps) {
+export default function FAQItem({ question, answer }) {
   return (
     <details className="group rounded-lg bg-white p-6 dark:bg-background-dark/50">
       <summary className="flex cursor-pointer items-center justify-between text-lg font-medium text-black dark:text-white">

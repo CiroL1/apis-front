@@ -1,13 +1,6 @@
-"use client";
-
-import { FullProduct } from "./ProductDetailContainer";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
-interface ProductReviewsProps {
-  product: FullProduct;
-}
-
-export default function ProductReviews({ product }: ProductReviewsProps) {
+export default function ProductReviews({ product }) {
   if (!product.reviews || product.reviews.length === 0) return null;
 
   const avgRating =
