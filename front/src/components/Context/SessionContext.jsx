@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import jwtDecode from "jwt-decode";
+import * as jwtDecode from "jwt-decode"; // ⚠️ Importar todo
 
 const SessionContext = createContext();
 
@@ -12,7 +12,7 @@ export const SessionProvider = ({ children }) => {
     const savedToken = localStorage.getItem("jwt");
     if (savedToken) {
       try {
-        const decoded = jwtDecode(savedToken);
+        const decoded = jwtDecode.default(savedToken); // ⚠️ usar .default
         const exp = decoded.exp * 1000;
         if (Date.now() < exp) {
           setToken(savedToken);
@@ -30,7 +30,7 @@ export const SessionProvider = ({ children }) => {
 
   const login = (newToken) => {
     try {
-      const decoded = jwtDecode(newToken);
+      const decoded = jwtDecode.default(newToken); // ⚠️ usar .default
       setToken(newToken);
       setUser(decoded);
       localStorage.setItem("jwt", newToken);
