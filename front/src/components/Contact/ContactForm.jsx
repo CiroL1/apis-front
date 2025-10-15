@@ -1,24 +1,25 @@
-"use client";
-
 import { useState } from "react";
 
 export default function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Enviar mensaje:", form);
-    // Aquí podrías hacer fetch a tu API
+    // Here you could make a fetch call to your API
   };
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           Nombre
         </label>
         <div className="mt-1">
@@ -35,7 +36,10 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           Correo electrónico
         </label>
         <div className="mt-1">
@@ -52,7 +56,10 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label
+          htmlFor="message"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
           Mensaje
         </label>
         <div className="mt-1">
