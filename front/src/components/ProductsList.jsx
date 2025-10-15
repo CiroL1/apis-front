@@ -1,20 +1,6 @@
-"use client";
-
 import { useMemo, useEffect } from "react";
-import ProductCard, { Product } from "./ProductCard";
+import ProductCard from "./ProductCard";
 import ProductFilters from "./ProductFilters";
-
-interface ProductsListProps {
-  products: Product[];
-  searchQuery: string;
-  selectedCategory: string;
-  setSelectedCategory: (cat: string) => void;
-  selectedSubcategory: string;
-  setSelectedSubcategory: (sub: string) => void;
-  itemsPerPage?: number;
-  currentPage: number;
-  setCurrentPage: (page: number) => void;
-}
 
 export default function ProductsList({
   products,
@@ -26,7 +12,7 @@ export default function ProductsList({
   itemsPerPage = 10,
   currentPage,
   setCurrentPage,
-}: ProductsListProps) {
+}) {
   // 🔄 Resetear página cuando cambian filtros o búsqueda
   useEffect(() => {
     setCurrentPage(1);

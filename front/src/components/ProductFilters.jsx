@@ -1,14 +1,4 @@
-"use client";
-
-import { Product } from "./ProductCard";
-
-interface ProductFiltersProps {
-  products: Product[];
-  selectedCategory: string;
-  setSelectedCategory: (cat: string) => void;
-  selectedSubcategory: string;
-  setSelectedSubcategory: (sub: string) => void;
-}
+import React from "react";
 
 export default function ProductFilters({
   products,
@@ -16,8 +6,8 @@ export default function ProductFilters({
   setSelectedCategory,
   selectedSubcategory,
   setSelectedSubcategory,
-}: ProductFiltersProps) {
-  const categories = Array.from(new Set(products.map((p) => p.category).filter(Boolean))) as string[];
+}) {
+  const categories = Array.from(new Set(products.map((p) => p.category).filter(Boolean)));
 
   const subcategories =
     selectedCategory && products.length
@@ -25,7 +15,7 @@ export default function ProductFilters({
           new Set(
             products
               .filter((p) => p.category === selectedCategory && p.subcategories)
-              .flatMap((p) => p.subcategories!)
+              .flatMap((p) => p.subcategories)
           )
         )
       : [];

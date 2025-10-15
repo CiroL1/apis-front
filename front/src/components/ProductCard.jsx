@@ -1,26 +1,10 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { FiEye, FiShoppingCart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  images: string[];
-  category?: string;
-  subcategories?: string[];
-  featured?: boolean;
-}
-
-interface ProductCardProps {
-  product: Product;
-}
-
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Autoplay cada 20 segundos
@@ -28,7 +12,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % product.images.length);
     }, 20000);
-
     return () => clearInterval(timer);
   }, [product.images.length]);
 
@@ -42,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const handleAddToCart = async () => {
     try {
-      const res = await fetch("/api/cart", {
+      const res = await fetch("http://localhost:8080/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId: product.id, quantity: 1 }),
@@ -110,7 +93,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </p>
         )}
 
-        {product.subcategories && product.subcategories.length > 0 && (
+        {product.subcategories?.length > 0 && (
           <p className="text-sm text-gray-600 dark:text-gray-300">
             <span className="font-medium">Subcategorías:</span> {product.subcategories.join(", ")}
           </p>
@@ -126,7 +109,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Botones */}
       <div className="mt-3 flex gap-2 justify-center">
         <Link
-          href={`/product/${product.id}`}
+          to={`/product/${product.id}`}
           className="flex items-center justify-center px-3 py-2 bg-primary text-white rounded hover:bg-primary/80 transition"
           title="Ver producto"
         >

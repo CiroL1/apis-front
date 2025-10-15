@@ -1,25 +1,12 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Product } from "./ProductCard";
 import Logo from "./Header/Logo";
 import NavDesktop from "./Header/NavDesktop";
 import SearchBar from "./Header/SearchBar";
 import CartButton from "./Header/CartButton";
 import MobileMenu from "./Header/MobileMenu";
 import UserProfileButton from "./Header/UserProfileButton";
-import { useSession } from "@/components/Context/SessionContext";
-
-interface HeaderProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  selectedCategory: string;
-  setSelectedCategory: (cat: string) => void;
-  selectedSubcategory: string;
-  setSelectedSubcategory: (sub: string) => void;
-  products: Product[];
-}
+import { useSession } from "./Context/SessionContext";
 
 export default function Header({
   searchQuery,
@@ -29,8 +16,9 @@ export default function Header({
   selectedSubcategory,
   setSelectedSubcategory,
   products,
-}: HeaderProps) {
-  const pathname = usePathname();
+}) {
+  const location = useLocation();
+  const pathname = location.pathname;
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const showSearch = pathname === "/products";
 
@@ -89,7 +77,6 @@ export default function Header({
                 </svg>
               </button>
             </div>
-
           </div>
         </div>
       </div>
