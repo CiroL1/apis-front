@@ -1,40 +1,46 @@
-"use client";
-
 import { useState, useEffect, useRef } from "react";
-import { Category, ProductResponse } from "../types";
 import ProductBasicInfo from "./ProductBasicInfo";
 import CategorySelect from "./ProductCategorySelect";
 import ProductImages from "./ProductImages";
 import ProductSpecifications from "./ProductSpecifications";
 import { FiPlus } from "react-icons/fi";
 
-type Props = {
-  token: string;
-  product: ProductResponse;
-  onClose: () => void;
-  onProductUpdated: (p: ProductResponse) => void;
-};
-
-export default function EditProductModal({ token, product, onClose, onProductUpdated }: Props) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [name, setName] = useState(product.name || "");
-  const [category, setCategory] = useState<Category | null>(null);
-  const [subcategories, setSubcategories] = useState<string[]>(product.subcategories || []);
-  const [price, setPrice] = useState(product.price?.toString() || "");
-  const [images, setImages] = useState<string[]>(product.images?.length ? product.images : [""]);
-  const [featured, setFeatured] = useState(product.featured || false);
-  const [description, setDescription] = useState(product.description || "");
-  const [specifications, setSpecifications] = useState<Record<string, string>>(product.specifications || {});
-  const [colors, setColors] = useState<string[]>(product.colors?.length ? product.colors : [""]);
-  const [storageOptions, setStorageOptions] = useState<string[]>(product.storageOptions?.length ? product.storageOptions : [""]);
+export default function CreateProductModal({ token, onClose, onProductCreated }) {
+  const [categories, setCategories] = useState([]);
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState(null);
+  const [subcategories, setSubcategories] = useState([]);
+  const [price, setPrice] = useState("");
+  const [images, setImages] = useState([""]);
+  const [featured, setFeatured] = useState(false);
+  const [description, setDescription] = useState("");
+  const [specifications, setSpecifications] = useState({});
+  const [colors, setColors] = useState([""]);
+  const [storageOptions, setStorageOptions] = useState([""]);
   const [loading, setLoading] = useState(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef(null);
 
-  // ✅ Cerrar al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/categories");
+        const data = (await res.json()).map((cat) => ({
+          ...cat,
+          groups: cat.groups || [],
+        }));
+        setCategories(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // 🔹 Cierra el modal si se hace clic fuera del contenido
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
         onClose();
       }
     };
@@ -42,47 +48,13 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // ✅ Cerrar con tecla Escape
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [onClose]);
-
-  // Cargar categorías
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("http://localhost:8080/api/categories");
-        const data: Category[] = (await res.json()).map((cat: any) => ({
-          ...cat,
-          groups: cat.groups || [],
-        }));
-        setCategories(data);
-
-        // Preseleccionar categoría si coincide por nombre
-        if (product.category) {
-          const found = data.find(c => c.name === product.category);
-          if (found) setCategory(found);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchCategories();
-  }, [product.category]);
-
-  // Guardar cambios
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!category) return alert("Select a category");
 
     setLoading(true);
     try {
       const body = {
-        id: product.id,
         name,
         price: Number(price),
         categoryId: category.id,
@@ -95,34 +67,36 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
         storageOptions: storageOptions.filter(s => s),
       };
 
-      const res = await fetch(`http://localhost:8080/api/products/${product.id}`, {
-        method: "PUT",
+      const res = await fetch("http://localhost:8080/api/products", {
+        method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(body),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      onProductUpdated(data);
+      onProductCreated(data);
       onClose();
     } catch (err) {
       console.error(err);
-      alert("Error updating product");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-4 z-50">
-      {/* ✅ ref agregado para detectar clics fuera */}
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800 w-full max-w-3xl rounded-lg shadow-xl p-6 overflow-y-auto max-h-[90vh]"
+        className="bg-white dark:bg-gray-800 w-full max-w-3xl rounded-2xl shadow-2xl p-6 overflow-y-auto max-h-[90vh] border border-gray-200 dark:border-gray-700"
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Product</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Create New Product
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-900 dark:hover:text-white text-xl"
+          >
             ✕
           </button>
         </div>
@@ -154,12 +128,19 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
             />
           </div>
           <div className="flex items-center gap-2">
-            <input type="checkbox" checked={featured} onChange={e => setFeatured(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={featured}
+              onChange={e => setFeatured(e.target.checked)}
+            />
             <label className="text-sm text-gray-700 dark:text-gray-300">Featured</label>
           </div>
 
           {/* Specifications */}
-          <ProductSpecifications specifications={specifications} setSpecifications={setSpecifications} />
+          <ProductSpecifications
+            specifications={specifications}
+            setSpecifications={setSpecifications}
+          />
 
           {/* Colors */}
           <div>
@@ -212,7 +193,9 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
                 />
                 <button
                   type="button"
-                  onClick={() => setStorageOptions(storageOptions.filter((_, i) => i !== idx))}
+                  onClick={() =>
+                    setStorageOptions(storageOptions.filter((_, i) => i !== idx))
+                  }
                   className="text-red-500"
                 >
                   ✕
@@ -230,7 +213,11 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
-            <button type="button" onClick={onClose} className="px-6 py-2 rounded-lg border text-gray-700 dark:text-white">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 rounded-lg border text-gray-700 dark:text-white"
+            >
               Cancel
             </button>
             <button
@@ -238,7 +225,7 @@ export default function EditProductModal({ token, product, onClose, onProductUpd
               disabled={loading}
               className="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
             >
-              {loading ? "Updating..." : "Save Changes"}
+              {loading ? "Creating..." : "Save Product"}
             </button>
           </div>
         </form>

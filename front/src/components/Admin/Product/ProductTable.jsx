@@ -1,16 +1,6 @@
-"use client";
-
 import ProductRow from "./ProductRow";
-import { ProductResponse } from "./types";
 
-type Props = {
-  products: ProductResponse[];
-  onEdit: (product: ProductResponse) => void;
-  onView: (product: ProductResponse) => void;
-  onDelete: (product: ProductResponse) => void;
-};
-
-export default function ProductTable({ products, onEdit, onView, onDelete }: Props) {
+export default function ProductTable({ products, onEdit, onView, onDelete }) {
   return (
     <div className="bg-white dark:bg-background-dark rounded-lg shadow-sm overflow-hidden">
       <div className="overflow-x-auto">

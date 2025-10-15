@@ -1,5 +1,3 @@
-"use client";
-
 import toast from "react-hot-toast";
 
 export default function DeleteCategoryModal({
@@ -7,11 +5,6 @@ export default function DeleteCategoryModal({
   onClose,
   onConfirm,
   loading,
-}: {
-  categoryName: string;
-  onClose: () => void;
-  onConfirm: () => void;
-  loading: boolean;
 }) {
   return (
     <div className="fixed inset-0 bg-background-dark/30 dark:bg-background-dark/50 flex items-center justify-center p-4 z-50">
@@ -20,8 +13,8 @@ export default function DeleteCategoryModal({
           Delete Category
         </h2>
         <p className="text-background-dark/80 dark:text-background-light/80 mb-6">
-          Are you sure you want to delete <strong>{categoryName}</strong>?
-          This action cannot be undone.
+          Are you sure you want to delete <strong>{categoryName}</strong>? This
+          action cannot be undone.
         </p>
         <div className="flex justify-end gap-3">
           <button

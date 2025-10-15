@@ -1,23 +1,18 @@
-"use client";
-
-import { ProductResponse } from "./types";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 
-type Props = {
-  product: ProductResponse;
-  onEdit: () => void;
-  onView: () => void;
-  onDelete: () => void;
-};
-
-export default function ProductRow({ product, onEdit, onView, onDelete }: Props) {
+export default function ProductRow({ product, onEdit, onView, onDelete }) {
   return (
     <tr className="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-      <th className="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap" scope="row">
+      <th
+        className="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap"
+        scope="row"
+      >
         {product.name ?? "-"}
       </th>
       <td className="px-6 py-4">{product.category ?? "-"}</td>
-      <td className="px-6 py-4">${product.price !== undefined ? product.price.toFixed(2) : "-"}</td>
+      <td className="px-6 py-4">
+        ${product.price !== undefined ? product.price.toFixed(2) : "-"}
+      </td>
       <td className="px-6 py-4 text-right">
         <div className="flex items-center justify-end gap-2">
           <button

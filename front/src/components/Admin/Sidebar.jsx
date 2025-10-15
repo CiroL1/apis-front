@@ -1,26 +1,18 @@
-"use client";
-
-import { useState } from "react";
-import { 
-  MdDashboard, 
-  MdInventory2, 
-  MdSell, 
-  MdShoppingCart, 
-  MdSettings 
+import {
+  MdDashboard,
+  MdInventory2,
+  MdSell,
+  MdShoppingCart,
+  MdSettings,
 } from "react-icons/md";
 
-type Section = "dashboard" | "products" | "categories" | "orders" | "settings";
-
-interface SidebarProps {
-  currentSection: Section;
-  setSection: (section: Section) => void;
-}
-
-export default function Sidebar({ currentSection, setSection }: SidebarProps) {
+export default function Sidebar({ currentSection, setSection }) {
   return (
     <aside className="w-64 bg-white dark:bg-background-dark border-r border-slate-200 dark:border-slate-800 flex-shrink-0">
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Admin Panel</h1>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          Admin Panel
+        </h1>
       </div>
       <nav className="mt-6 px-4 space-y-2">
         <NavItem
@@ -58,7 +50,7 @@ export default function Sidebar({ currentSection, setSection }: SidebarProps) {
   );
 }
 
-function NavItem({ icon, label, active, onClick }: { icon: React.ReactNode; label: string; active?: boolean; onClick: () => void }) {
+function NavItem({ icon, label, active, onClick }) {
   return (
     <button
       onClick={onClick}

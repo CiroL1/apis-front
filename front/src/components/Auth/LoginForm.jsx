@@ -1,19 +1,17 @@
-"use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "@/components/Context/SessionContext";
+import { useNavigate } from "react-router-dom"; // Importante: Cambiado de 'next/navigation'
+import { useSession } from "@/components/Context/SessionContext"; // Se asume que esta ruta es correcta
 import toast from "react-hot-toast";
 
 export default function LoginForm() {
-  const router = useRouter();
+  const navigate = useNavigate(); // Cambiado de useRouter a useNavigate
   const { login } = useSession();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -43,9 +41,12 @@ export default function LoginForm() {
       toast.success("Inicio de sesión exitoso");
 
       // Redirigir según rol
-      if (data.type === "ADMIN") router.push("/admin");
-      else router.push("/user");
-    } catch (err: any) {
+      if (data.type === "ADMIN") {
+        navigate("/admin"); // Cambiado de router.push a navigate
+      } else {
+        navigate("/user"); // Cambiado de router.push a navigate
+      }
+    } catch (err) {
       toast.error(err.message || "Error al iniciar sesión");
     } finally {
       setLoading(false);
@@ -56,25 +57,29 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="mt-8 space-y-6">
       <div className="space-y-4 rounded-md shadow-sm">
         <div>
-          <label htmlFor="email" className="sr-only">Correo electrónico</label>
+          <label htmlFor="email" className="sr-only">
+            Correo electrónico
+          </label>
           <input
             id="email"
             type="email"
             required
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Correo electrónico"
             className="form-input relative block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-background-light dark:bg-background-dark px-3 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
           />
         </div>
         <div>
-          <label htmlFor="password" className="sr-only">Contraseña</label>
+          <label htmlFor="password" className="sr-only">
+            Contraseña
+          </label>
           <input
             id="password"
             type="password"
             required
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Contraseña"
             className="form-input relative block w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-background-light dark:bg-background-dark px-3 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
           />
@@ -83,7 +88,9 @@ export default function LoginForm() {
 
       <div className="flex items-center justify-between">
         <div className="text-sm">
-          <a href="#" className="font-medium text-primary hover:text-primary/80">¿Olvidó su contraseña?</a>
+          <a href="#" className="font-medium text-primary hover:text-primary/80">
+            ¿Olvidó su contraseña?
+          </a>
         </div>
       </div>
 

@@ -1,7 +1,4 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
-import { Category, SubcategoryGroup } from "./CategorySection";
 import { IoClose } from "react-icons/io5";
 
 export default function EditCategoryModal({
@@ -9,24 +6,19 @@ export default function EditCategoryModal({
   category,
   onClose,
   onCategoryUpdated,
-}: {
-  token: string;
-  category: Category;
-  onClose: () => void;
-  onCategoryUpdated: (c: Category) => void;
 }) {
   const [name, setName] = useState(category.name);
   const [description, setDescription] = useState(category.description);
-  const [groups, setGroups] = useState<SubcategoryGroup[]>(category.groups);
+  const [groups, setGroups] = useState(category.groups);
   const [newGroupName, setNewGroupName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef(null);
 
   // 🟢 Cerrar al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
         onClose();
       }
     };
@@ -43,11 +35,11 @@ export default function EditCategoryModal({
     setNewGroupName("");
   };
 
-  const removeGroup = (id: string) => {
+  const removeGroup = (id) => {
     setGroups((prev) => prev.filter((g) => g.id !== id));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -63,7 +55,7 @@ export default function EditCategoryModal({
         }
       );
       if (!res.ok) throw new Error("Error updating category");
-      const data: Category = await res.json();
+      const data = await res.json();
       onCategoryUpdated(data);
       onClose();
     } catch (err) {

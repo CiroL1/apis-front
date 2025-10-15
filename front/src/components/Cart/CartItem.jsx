@@ -1,26 +1,20 @@
-"use client";
-
-import { Product } from "@/components/ProductCard";
 import { useState } from "react";
 
-interface CartItemProps {
-  product: Product & { quantity: number; size?: string };
-  onQuantityChange: (productId: string, quantity: number) => void;
-}
-
-export default function CartItem({ product, onQuantityChange }: CartItemProps) {
+export default function CartItem({ product, onQuantityChange }) {
   const [quantity, setQuantity] = useState(product.quantity);
 
   const handleDecrease = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
-      onQuantityChange(product.id, quantity - 1);
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      onQuantityChange(product.id, newQuantity);
     }
   };
 
   const handleIncrease = () => {
-    setQuantity(quantity + 1);
-    onQuantityChange(product.id, quantity + 1);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onQuantityChange(product.id, newQuantity);
   };
 
   return (
@@ -35,7 +29,9 @@ export default function CartItem({ product, onQuantityChange }: CartItemProps) {
       <div className="flex-1">
         <p className="font-medium">{product.name}</p>
         {product.size && (
-          <p className="text-sm text-muted-light dark:text-muted-dark">Size: {product.size}</p>
+          <p className="text-sm text-muted-light dark:text-muted-dark">
+            Size: {product.size}
+          </p>
         )}
         <p className="mt-1 font-bold">${product.price.toFixed(2)}</p>
       </div>

@@ -1,33 +1,19 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import CategoryTable from "./CategoryTable";
 import CreateCategoryModal from "./CreateCategoryModal";
 import EditCategoryModal from "./EditCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
-import { useSession } from "@/components/Context/SessionContext";
+import { useSession } from "@/components/Context/SessionContext"; // Asumo que esta ruta de importación es correcta en tu nuevo proyecto.
 import { FiPlus } from "react-icons/fi";
 import toast from "react-hot-toast";
 
-export type SubcategoryGroup = {
-  id: string;
-  name: string;
-};
-
-export type Category = {
-  id: string;
-  name: string;
-  description: string;
-  groups: SubcategoryGroup[];
-};
-
 export default function CategorySection() {
   const { token } = useSession();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editCategory, setEditCategory] = useState<Category | null>(null);
-  const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
+  const [editCategory, setEditCategory] = useState(null);
+  const [deleteCategory, setDeleteCategory] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   // Fetch categories
@@ -39,7 +25,7 @@ export default function CategorySection() {
       const res = await fetch("http://localhost:8080/api/categories", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data: Category[] = await res.json();
+      const data = await res.json();
       setCategories(data?.length ? data : mockCategories);
     } catch (err) {
       console.error("Error fetching categories:", err);
@@ -54,13 +40,13 @@ export default function CategorySection() {
   }, [token]);
 
   // Handle create
-  const handleCategoryCreated = (newCategory: Category) => {
+  const handleCategoryCreated = (newCategory) => {
     setCategories((prev) => [...prev, newCategory]);
     setShowCreateModal(false);
   };
 
   // Handle edit
-  const handleCategoryUpdated = (updated: Category) => {
+  const handleCategoryUpdated = (updated) => {
     setCategories((prev) =>
       prev.map((c) => (c.id === updated.id ? updated : c))
     );
@@ -125,7 +111,7 @@ export default function CategorySection() {
       {/* Modals */}
       {showCreateModal && token && (
         <CreateCategoryModal
-          token={token!}
+          token={token}
           onClose={() => setShowCreateModal(false)}
           onCategoryCreated={handleCategoryCreated}
         />
@@ -133,7 +119,7 @@ export default function CategorySection() {
 
       {editCategory && token && (
         <EditCategoryModal
-          token={token!}
+          token={token}
           category={editCategory}
           onClose={() => setEditCategory(null)}
           onCategoryUpdated={handleCategoryUpdated}
@@ -153,7 +139,7 @@ export default function CategorySection() {
 }
 
 // Mock categories (fallback)
-const mockCategories: Category[] = [
+const mockCategories = [
   {
     id: "1",
     name: "Clothing",

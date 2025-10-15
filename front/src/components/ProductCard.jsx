@@ -1,17 +1,34 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // ✅ En Vite usamos react-router-dom, no next/link
+import Link from "next/link";
 import { FiEye, FiShoppingCart, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
-export default function ProductCard({ product }) {
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  images: string[];
+  category?: string;
+  subcategories?: string[];
+  featured?: boolean;
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // autoplay cada 20s
+  // Autoplay cada 20 segundos
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % product.images.length);
     }, 20000);
+
     return () => clearInterval(timer);
   }, [product.images.length]);
 
@@ -25,7 +42,6 @@ export default function ProductCard({ product }) {
 
   const handleAddToCart = async () => {
     try {
-      // simulamos API local, podés reemplazar por tu backend real
       const res = await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,10 +49,10 @@ export default function ProductCard({ product }) {
       });
 
       if (!res.ok) throw new Error("Error al añadir al carrito");
-      toast.success(`"${product.name}" añadido al carrito`);
+      toast.success(`Producto "${product.name}" añadido al carrito con éxito`);
     } catch (err) {
       console.error(err);
-      toast.error(`No se pudo añadir "${product.name}"`);
+      toast.error(`No se pudo añadir "${product.name}" al carrito`);
     }
   };
 
@@ -83,7 +99,7 @@ export default function ProductCard({ product }) {
         )}
       </div>
 
-      {/* Info */}
+      {/* Información */}
       <div className="mt-3 space-y-1 flex-1">
         <h3 className="font-semibold text-gray-800 dark:text-white">{product.name}</h3>
         <p className="text-sm text-gray-500 dark:text-gray-400">${product.price.toFixed(2)}</p>
@@ -110,7 +126,7 @@ export default function ProductCard({ product }) {
       {/* Botones */}
       <div className="mt-3 flex gap-2 justify-center">
         <Link
-          to={`/product/${product.id}`}
+          href={`/product/${product.id}`}
           className="flex items-center justify-center px-3 py-2 bg-primary text-white rounded hover:bg-primary/80 transition"
           title="Ver producto"
         >

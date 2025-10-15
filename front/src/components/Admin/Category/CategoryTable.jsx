@@ -1,17 +1,6 @@
-"use client";
-
 import CategoryRow from "./CategoryRow";
-import { Category } from "./CategorySection";
 
-export default function CategoryTable({
-  categories,
-  onEdit,
-  onDelete,
-}: {
-  categories: Category[];
-  onEdit: (c: Category) => void;
-  onDelete: (c: Category) => void;
-}) {
+export default function CategoryTable({ categories, onEdit, onDelete }) {
   return (
     <div className="bg-white dark:bg-background-dark rounded-lg shadow-sm overflow-hidden">
       <div className="overflow-x-auto">

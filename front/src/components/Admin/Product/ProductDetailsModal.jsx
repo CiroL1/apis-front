@@ -1,16 +1,7 @@
-"use client";
-
-import { ProductResponse } from "./types";
 import { FiX, FiStar } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function ProductDetailsModal({
-  product,
-  onClose,
-}: {
-  product: ProductResponse;
-  onClose: () => void;
-}) {
+export default function ProductDetailsModal({ product, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
@@ -112,22 +103,21 @@ export default function ProductDetailsModal({
                 </div>
               )}
 
-            {product.colors && product.colors.length > 0 && (
-            <div>
-                <h4 className="font-semibold mb-1">Colors</h4>
-                <div className="flex gap-2 flex-wrap">
-                {product.colors.map((color, i) => (
-                    <div
-                    key={i}
-                    className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600"
-                    style={{ backgroundColor: color }} // ✅ acá se aplica el color
-                    title={color}
-                    />
-                ))}
+              {product.colors && product.colors.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-1">Colors</h4>
+                  <div className="flex gap-2 flex-wrap">
+                    {product.colors.map((color, i) => (
+                      <div
+                        key={i}
+                        className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600"
+                        style={{ backgroundColor: color }}
+                        title={color}
+                      />
+                    ))}
+                  </div>
                 </div>
-            </div>
-            )}
-
+              )}
 
               {product.storageOptions && product.storageOptions.length > 0 && (
                 <div>

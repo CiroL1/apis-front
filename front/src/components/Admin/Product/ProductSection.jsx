@@ -1,23 +1,20 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import ProductTable from "./ProductTable";
 import CreateProductModal from "./ProductModal/CreateProductModal";
 import EditProductModal from "./ProductModal/EditProductModal";
 import ProductDetailsModal from "./ProductDetailsModal";
-import { useSession } from "@/components/Context/SessionContext";
+import { useSession } from "@/components/Context/SessionContext"; // Asumo que esta ruta sigue siendo válida en tu proyecto React.
 import { FiPlus } from "react-icons/fi";
-import { ProductResponse } from "./types";
 
 export default function ProductSection() {
   const { token } = useSession();
-  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editProduct, setEditProduct] = useState<ProductResponse | null>(null);
-  const [viewingProduct, setViewingProduct] = useState<ProductResponse | null>(null);
-  const [deleteProduct, setDeleteProduct] = useState<ProductResponse | null>(null);
+  const [editProduct, setEditProduct] = useState(null);
+  const [viewingProduct, setViewingProduct] = useState(null);
+  const [deleteProduct, setDeleteProduct] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchProducts = async () => {
@@ -28,7 +25,7 @@ export default function ProductSection() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data: ProductResponse[] = await res.json();
+      const data = await res.json();
       setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching products:", err);
@@ -39,15 +36,17 @@ export default function ProductSection() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    if (token) {
+        fetchProducts();
+    }
   }, [token]);
 
-  const handleProductCreated = (newProduct: ProductResponse) => {
+  const handleProductCreated = (newProduct) => {
     setProducts((prev) => [...prev, newProduct]);
     setShowCreateModal(false);
   };
 
-  const handleProductUpdated = (updated: ProductResponse) => {
+  const handleProductUpdated = (updated) => {
     setProducts((prev) =>
       prev.map((p) => (p.id && updated.id && p.id === updated.id ? updated : p))
     );

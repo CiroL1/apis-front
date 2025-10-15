@@ -1,14 +1,4 @@
-"use client";
 import React, { useEffect, useState } from "react";
-import { Category } from "../types";
-
-type Props = {
-  categories: Category[];
-  category: Category | null;
-  setCategory: (c: Category | null) => void;
-  subcategories: string[];
-  setSubcategories: (subs: string[]) => void;
-};
 
 export default function CategorySelect({
   categories,
@@ -16,8 +6,8 @@ export default function CategorySelect({
   setCategory,
   subcategories,
   setSubcategories,
-}: Props) {
-  const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
+}) {
+  const [availableSubcategories, setAvailableSubcategories] = useState([]);
 
   // Cuando cambia la categoría seleccionada
   useEffect(() => {

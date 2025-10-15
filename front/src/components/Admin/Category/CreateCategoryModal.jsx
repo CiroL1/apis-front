@@ -1,7 +1,4 @@
-"use client";
-
 import { useState, useRef, useEffect } from "react";
-import { Category, SubcategoryGroup } from "./CategorySection";
 import toast from "react-hot-toast";
 import { FiPlus, FiX } from "react-icons/fi";
 
@@ -9,23 +6,19 @@ export default function CreateCategoryModal({
   token,
   onClose,
   onCategoryCreated,
-}: {
-  token: string;
-  onClose: () => void;
-  onCategoryCreated: (c: Category) => void;
 }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [groups, setGroups] = useState<SubcategoryGroup[]>([]);
+  const [groups, setGroups] = useState([]);
   const [newGroupName, setNewGroupName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef(null);
 
   // 🔸 Cerrar modal al hacer clic fuera
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
         onClose();
       }
     };
@@ -42,11 +35,11 @@ export default function CreateCategoryModal({
     setNewGroupName("");
   };
 
-  const removeGroup = (id: string) => {
+  const removeGroup = (id) => {
     setGroups((prev) => prev.filter((g) => g.id !== id));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -68,7 +61,7 @@ export default function CreateCategoryModal({
 
       if (!res.ok) throw new Error(`Server responded with ${res.status}`);
 
-      const data: Category = await res.json();
+      const data = await res.json();
       onCategoryCreated(data);
 
       toast.success("Category created successfully!", { id: toastId });

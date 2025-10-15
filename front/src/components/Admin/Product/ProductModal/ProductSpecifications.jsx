@@ -1,32 +1,25 @@
 import React, { useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 
-type Spec = { id: string; key: string; value: string };
-
-type Props = {
-  specifications: Record<string, string>;
-  setSpecifications: React.Dispatch<React.SetStateAction<Record<string, string>>>;
-};
-
-export default function ProductSpecifications({ specifications, setSpecifications }: Props) {
+export default function ProductSpecifications({ specifications, setSpecifications }) {
   // Convertimos specs a array con id interno
-  const [specList, setSpecList] = useState<Spec[]>(
+  const [specList, setSpecList] = useState(
     Object.entries(specifications).map(([k, v]) => ({ id: k, key: k, value: v }))
   );
 
-  const syncToParent = (list: Spec[]) => {
-    const newSpecs: Record<string, string> = {};
+  const syncToParent = (list) => {
+    const newSpecs = {};
     list.forEach(s => { newSpecs[s.key] = s.value; });
     setSpecifications(newSpecs);
   };
 
-  const updateValue = (id: string, value: string) => {
+  const updateValue = (id, value) => {
     const newList = specList.map(s => (s.id === id ? { ...s, value } : s));
     setSpecList(newList);
     syncToParent(newList);
   };
 
-  const updateKey = (id: string, newKey: string) => {
+  const updateKey = (id, newKey) => {
     const trimmed = newKey.trim();
     if (!trimmed) return;
     const newList = specList.map(s => (s.id === id ? { ...s, key: trimmed } : s));
@@ -34,7 +27,7 @@ export default function ProductSpecifications({ specifications, setSpecification
     syncToParent(newList);
   };
 
-  const removeSpec = (id: string) => {
+  const removeSpec = (id) => {
     const newList = specList.filter(s => s.id !== id);
     setSpecList(newList);
     syncToParent(newList);

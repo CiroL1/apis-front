@@ -1,12 +1,10 @@
-"use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "@/components/Context/SessionContext";
+import { useNavigate } from "react-router-dom"; // Changed from 'next/navigation'
+import { useSession } from "@/components/Context/SessionContext"; // Assuming this path is correct
 import toast from "react-hot-toast";
 
 export default function RegisterForm() {
-  const router = useRouter();
+  const navigate = useNavigate(); // Changed from useRouter
   const { login } = useSession();
 
   const [firstName, setFirstName] = useState("");
@@ -16,7 +14,7 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -27,7 +25,7 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      // Registrar usuario
+      // Register user
       const response = await fetch("http://localhost:8080/api/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,15 +43,18 @@ export default function RegisterForm() {
 
       const data = await response.json();
 
-      // Guardar token y loguear automáticamente
+      // Save token and log in automatically
       login(data.token);
 
       toast.success("Usuario registrado correctamente");
 
-      // Redirigir según rol
-      if (data.type === "ADMIN") router.push("/admin");
-      else router.push("/user");
-    } catch (err: any) {
+      // Redirect based on role
+      if (data.type === "ADMIN") {
+        navigate("/admin"); // Changed from router.push
+      } else {
+        navigate("/user"); // Changed from router.push
+      }
+    } catch (err) {
       toast.error(err.message || "Error en el registro");
     } finally {
       setLoading(false);

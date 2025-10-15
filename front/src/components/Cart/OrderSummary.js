@@ -1,11 +1,9 @@
-interface OrderSummaryProps {
-  subtotal: number;
-  isDisabled?: boolean;
-}
-
-export default function OrderSummary({ subtotal, isDisabled = false }: OrderSummaryProps) {
-  return (
-    <div className="rounded-lg border border-subtle-light dark:border-subtle-dark bg-background-light dark:bg-subtle-dark/20 p-6">
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = OrderSummary;
+function OrderSummary(_a) {
+    var subtotal = _a.subtotal, _b = _a.isDisabled, isDisabled = _b === void 0 ? false : _b;
+    return (<div className="rounded-lg border border-subtle-light dark:border-subtle-dark bg-background-light dark:bg-subtle-dark/20 p-6">
       <h2 className="text-lg font-bold">Order Summary</h2>
       <div className="mt-4 space-y-2">
         <div className="flex justify-between">
@@ -27,13 +25,8 @@ export default function OrderSummary({ subtotal, isDisabled = false }: OrderSumm
           <p className="font-bold">${subtotal.toFixed(2)}</p>
         </div>
       </div>
-      <button
-        disabled={isDisabled}
-        className={`mt-6 flex w-full h-12 items-center justify-center rounded-lg bg-primary px-5 text-base font-bold text-white shadow-sm transition
-          ${isDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-primary/90"}`}
-      >
+      <button disabled={isDisabled} className={"mt-6 flex w-full h-12 items-center justify-center rounded-lg bg-primary px-5 text-base font-bold text-white shadow-sm transition\n          ".concat(isDisabled ? "opacity-50 cursor-not-allowed" : "hover:bg-primary/90")}>
         Proceed to Checkout
       </button>
-    </div>
-  );
+    </div>);
 }

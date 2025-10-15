@@ -1,17 +1,6 @@
-"use client";
-
-import { Category } from "./CategorySection";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
-export default function CategoryRow({
-  category,
-  onEdit,
-  onDelete,
-}: {
-  category: Category;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
+export default function CategoryRow({ category, onEdit, onDelete }) {
   return (
     <tr className="border-b dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
       <th
